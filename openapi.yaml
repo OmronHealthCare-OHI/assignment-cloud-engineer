@@ -1,0 +1,152 @@
+openapi: 3.0.3
+info:
+  title: Measurements Service
+  version: 0.1.0
+  description: |
+    Ingests measurement submissions from the OMRON mobile app and makes measurements
+    retrievable for a health app.
+
+    Devices sync to the mobile app over Bluetooth; the app normalizes vendor formats
+    into the submission structure below and pushes it to the cloud — possibly more than
+    once (retries, device re-syncs), see `fixtures/`.
+
+    The perimeter of this service is a given: the paths, the query parameters, and the
+    submission schema below. You do not need to redesign any of it.
+
+    The shape of the Measurement object returned on retrieval is deliberately NOT
+    specified: that is yours, downstream of your data model (deliverable element 2).
+    Update this spec to match what you design.
+
+paths:
+  /measurements:
+    post:
+      summary: Ingest a measurement submission from the mobile app
+      description: |
+        The app may deliver the same measurement more than once — a retried submission,
+        or a device re-sync overlapping an earlier one — and submissions carry no
+        identifier of their own. How you validate, store, and determine what you have
+        already seen is your design.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MeasurementSubmission"
+      responses:
+        "202":
+          description: Submission accepted
+        "400":
+          description: Submission rejected (your call what qualifies and what the body says)
+    get:
+      summary: Retrieve measurements of one type over a time range
+      parameters:
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [blood_pressure, body_mass]
+        - name: from
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Measurements in the requested range
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Measurement"
+
+components:
+  schemas:
+    MeasurementSubmission:
+      description: |
+        One push from the mobile app: the measurements it collected from one device
+        since the last sync. Matches the examples in fixtures/. Carries no identifier —
+        identity is yours to determine.
+      type: object
+      required: [device, measurements]
+      properties:
+        device:
+          type: object
+          required: [model, serialNumber]
+          properties:
+            model:
+              type: string
+              example: HEM-7361T
+            serialNumber:
+              type: string
+              example: BP-4F2A-009318
+        measurements:
+          type: array
+          minItems: 1
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/BloodPressureMeasurement"
+              - $ref: "#/components/schemas/BodyMassMeasurement"
+            discriminator:
+              propertyName: type
+
+    BloodPressureMeasurement:
+      type: object
+      required: [type, takenAt, values]
+      properties:
+        type:
+          type: string
+          enum: [blood_pressure]
+        takenAt:
+          type: string
+          format: date-time
+          description: When the device took the reading (device-local offset preserved)
+        values:
+          type: object
+          required: [systolic_mmhg, diastolic_mmhg, pulse_bpm]
+          properties:
+            systolic_mmhg:
+              type: number
+            diastolic_mmhg:
+              type: number
+            pulse_bpm:
+              type: number
+            irregular_heartbeat:
+              type: boolean
+
+    BodyMassMeasurement:
+      type: object
+      required: [type, takenAt, values]
+      properties:
+        type:
+          type: string
+          enum: [body_mass]
+        takenAt:
+          type: string
+          format: date-time
+        values:
+          type: object
+          required: [body_mass_g]
+          properties:
+            body_mass_g:
+              type: integer
+              description: Body mass in grams
+            impedance_ohm:
+              type: integer
+              description: Bio-impedance in ohms; 0 means the impedance measurement failed
+
+    Measurement:
+      description: |
+        ── YOUR RETRIEVAL SHAPE GOES HERE ──
+        Replace this placeholder with what a measurement looks like when read back.
+        It follows from the data model you design; it must be able to represent both
+        measurement types above.
+      type: object

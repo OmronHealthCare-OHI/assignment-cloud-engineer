@@ -1,0 +1,9 @@
+# Optional: a local DynamoDB to develop and test against — no AWS account needed.
+#   docker compose up -d
+#   endpoint: http://localhost:8000 (any dummy credentials work)
+services:
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    command: -jar DynamoDBLocal.jar -sharedDb -inMemory
+    ports:
+      - "8000:8000"

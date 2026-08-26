@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": { "correctness": "error" },
+  "rules": {
+    "eslint/no-case-declarations": "error",
+    "eslint/no-empty": "error",
+    "eslint/no-fallthrough": "error",
+    "eslint/no-prototype-builtins": "error",
+    "typescript/ban-ts-comment": "error",
+    "typescript/no-array-constructor": "error",
+    "typescript/no-empty-object-type": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-namespace": "error",
+    "typescript/no-unsafe-function-type": "error"
+  },
+  "ignorePatterns": ["**/dist/", "coverage/"]
+}

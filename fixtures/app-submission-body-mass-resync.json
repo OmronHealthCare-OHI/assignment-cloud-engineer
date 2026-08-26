@@ -1,0 +1,24 @@
+{
+  "device": {
+    "model": "SC-330",
+    "serialNumber": "SC330-118842"
+  },
+  "measurements": [
+    {
+      "type": "body_mass",
+      "takenAt": "2026-08-25T07:34:35Z",
+      "values": {
+        "body_mass_g": 82400,
+        "impedance_ohm": 512
+      }
+    },
+    {
+      "type": "body_mass",
+      "takenAt": "2026-08-26T07:41:12Z",
+      "values": {
+        "body_mass_g": 82150,
+        "impedance_ohm": 0
+      }
+    }
+  ]
+}

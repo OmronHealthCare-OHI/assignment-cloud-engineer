@@ -1,0 +1,15 @@
+{
+  "name": "measurements-service",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The measurements service — your implementation lives here",
+  "type": "module",
+  "main": "dist/entry/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.600.0",
+    "@aws-sdk/lib-dynamodb": "^3.600.0"
+  }
+}

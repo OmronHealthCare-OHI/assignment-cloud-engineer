@@ -1,0 +1,26 @@
+{
+  "name": "cloud-engineer-assignment",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OMRON Cloud Engineer technical assignment — measurements from devices. Repo shape follows the OHI service-repo template.",
+  "engines": {
+    "node": "^22.12.0 || >=24.0.0"
+  },
+  "workspaces": [
+    "services/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "vitest run",
+    "lint": "oxlint",
+    "lint:types": "oxlint --type-aware"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "dynalite": "^4.0.0",
+    "oxlint": "^1.79.0",
+    "oxlint-tsgolint": "^7.0.2001",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
+  }
+}

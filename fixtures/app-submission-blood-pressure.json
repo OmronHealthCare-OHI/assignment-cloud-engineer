@@ -1,0 +1,28 @@
+{
+  "device": {
+    "model": "HEM-7361T",
+    "serialNumber": "BP-4F2A-009318"
+  },
+  "measurements": [
+    {
+      "type": "blood_pressure",
+      "takenAt": "2026-08-25T08:14:12+02:00",
+      "values": {
+        "systolic_mmhg": 128,
+        "diastolic_mmhg": 84,
+        "pulse_bpm": 71,
+        "irregular_heartbeat": false
+      }
+    },
+    {
+      "type": "blood_pressure",
+      "takenAt": "2026-08-25T21:18:03+02:00",
+      "values": {
+        "systolic_mmhg": 134,
+        "diastolic_mmhg": 88,
+        "pulse_bpm": 76,
+        "irregular_heartbeat": true
+      }
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 // The ingest contract — these types mirror the given perimeter in openapi.yaml
-// and the examples in fixtures/. They are yours to consume, not to redesign.
+// and the examples in `/fixtures/`.
 
 export type MeasurementType = 'blood_pressure' | 'body_mass';
 

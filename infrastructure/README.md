@@ -7,7 +7,9 @@ Terraform code for the measurements service lives here.
 The required checks are `terraform init -backend=false`, `terraform validate`, and
 `terraform fmt` (see the root `AGENTS.md`) — Terraform never needs to reach real AWS
 for this assignment. If you want to go further and actually `terraform apply` your
-table design somewhere, this repo points the AWS provider at
+table design somewhere (note: until you've written your own aws_dynamodb_table
+resource, `apply` will show `0 added` — that's expected, module.label alone never
+touches AWS), this repo points the AWS provider at
 [LocalStack](https://www.localstack.cloud/) running in Docker.
 
 This is optional verification for your own confidence, not a required deliverable —
@@ -18,13 +20,18 @@ don't let it eat into your timebox.
 2. From the repo root: `cp .env.example .env` and fill in `LOCALSTACK_AUTH_TOKEN`.
 3. `npm run infra:up` — starts LocalStack and waits until it's healthy.
 4. From here (`infrastructure/`): `terraform init -backend=false && terraform apply -auto-approve`.
-5. `terraform output -raw table_name` gives you the table name to point a manual
-   check at, e.g.:
+5. Your table's name is `module.label.id` (the pre-filled naming module in
+   `main.tf`, which you don't touch), that resolves to `ohi-tst-measurements`. The
+   AWS CLI needs *some* region and credentials even against a local endpoint (it
+   won't reach real AWS, but it insists on the flags), so export dummy ones once
+   per shell:
 
    ```bash
-   aws dynamodb put-item --table-name "$(terraform output -raw table_name)" \
+   export AWS_ACCESS_KEY_ID=test AWS_SECRET_ACCESS_KEY=test AWS_DEFAULT_REGION=us-east-1
+
+   aws dynamodb put-item --table-name ohi-tst-measurements \
      --item '{"pk": {"S": "smoke-test"}}' --endpoint-url http://localhost:4566
-   aws dynamodb scan --table-name "$(terraform output -raw table_name)" \
+   aws dynamodb scan --table-name ohi-tst-measurements \
      --endpoint-url http://localhost:4566
    ```
 

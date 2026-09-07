@@ -14,6 +14,11 @@ npm run build
 Your implementation lives in the `services/measurements` workspace (`src/core/` for
 domain logic, `src/entry/` for your compute adapter); tests go in `test/`.
 
+Terraform never needs real AWS for this assignment (`terraform validate`/`fmt` are
+the required checks, see `AGENTS.md`). If you want to actually `terraform apply`
+your table design locally, see `infrastructure/README.md` for the optional
+walkthrough.
+
 ## 1. Architectural overview
 
 ### System context

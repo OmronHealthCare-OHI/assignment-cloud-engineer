@@ -55,3 +55,6 @@ npm-debug.log*
 .DS_Store
 .vscode/
 .idea/
+
+# Local git worktrees (created for comparing local-dev backends)
+.worktrees/

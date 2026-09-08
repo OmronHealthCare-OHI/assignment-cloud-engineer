@@ -14,6 +14,14 @@ npm run build
 Your implementation lives in the `services/measurements` workspace (`src/core/` for
 domain logic, `src/entry/` for your compute adapter); tests go in `test/`.
 
+This repo's Terraform is meant to be applied locally as you work, not just
+validated, `npm run infra:up` starts a local AWS emulator, then `terraform apply`
+from `infrastructure/` deploys your table design there so you're developing and
+testing against something real, not just satisfying a linter. See
+`infrastructure/README.md` for the full walkthrough. (The only strictly required
+*checks* are `terraform validate`/`fmt`, see `AGENTS.md`, but applying locally as
+you go is how this is meant to be worked, not extra credit.)
+
 ## 1. Architectural overview
 
 ### System context

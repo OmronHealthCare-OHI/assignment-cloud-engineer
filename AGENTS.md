@@ -23,7 +23,8 @@ maps the repository.
 | `test/measurement-repository.test.ts` | Repository test scaffold; its todos name the expected coverage |
 | `infrastructure/` | Terraform. `main.tf` carries the pre-filled CloudPosse label module — consume `module.label.id` and `module.label.tags`, don't modify it |
 | `infrastructure/measurement-storage.tf` | **The required design artifact:** the `aws_dynamodb_table` resource *is* the data model (key schema, attributes, indexes) |
-| `docker-compose.yml` | Optional DynamoDB Local (`docker compose up -d`, endpoint `http://localhost:8000`) |
+| `docker-compose.yml` | Optional local AWS emulation via LocalStack for `terraform apply` (`npm run infra:up`, endpoint `http://localhost:4566`, needs a free LocalStack account/token) — see `infrastructure/README.md` |
+| `.env.example` | Copy to `.env` and set `LOCALSTACK_AUTH_TOKEN` if you want to run `infra:up` |
 
 ## Commands
 

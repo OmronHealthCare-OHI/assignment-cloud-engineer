@@ -1,9 +1,26 @@
-# Optional: a local DynamoDB to develop and test against — no AWS account needed.
-#   docker compose up -d
-#   endpoint: http://localhost:8000 (any dummy credentials work)
+# Local AWS emulation, so the Terraform in infrastructure/ can be *applied*
+# locally instead of only validated. Optional: the required checks are
+# `terraform validate`/`terraform fmt` (see AGENTS.md), this is just for your
+# own confidence that the table design actually deploys.
+#
+# LocalStack needs a free account and an auth token to start (since March
+# 2026, no credit card for the free "Hobby" tier, but you do need an
+# account). Get one at https://app.localstack.cloud before you start your
+# timebox, it only takes a couple of minutes, then:
+#
+#   cp .env.example .env   # fill in LOCALSTACK_AUTH_TOKEN
+#   npm run infra:up
+#
+# See infrastructure/README.md for the full walkthrough.
 services:
-  dynamodb-local:
-    image: amazon/dynamodb-local:latest
-    command: -jar DynamoDBLocal.jar -sharedDb -inMemory
+  localstack:
+    image: localstack/localstack:latest
     ports:
-      - "8000:8000"
+      - "4566:4566"
+    environment:
+      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:?Set LOCALSTACK_AUTH_TOKEN in a local .env file (copy .env.example) — see infrastructure/README.md}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 20

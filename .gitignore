@@ -50,8 +50,12 @@ npm-debug.log*
 # Local environment
 .env
 .env.*
+!.env.example
 
 # OS / editor noise
 .DS_Store
 .vscode/
 .idea/
+
+# Local git worktrees (created for comparing local-dev backends)
+.worktrees/

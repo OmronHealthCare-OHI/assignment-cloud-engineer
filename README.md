@@ -73,6 +73,10 @@ _Your data model and flow description here._
 
 _Notes on your implementation: what you built, how to exercise it, what you left out._
 
+## 4. AI usage
+
+_Notes on your AI usage: Which model/skills/agents, rough setup._
+
 ## 4. What could another team leverage from this setup?
 
 _Your answer here._

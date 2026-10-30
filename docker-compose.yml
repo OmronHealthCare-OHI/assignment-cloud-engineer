@@ -20,7 +20,14 @@ services:
     environment:
       - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:?Set LOCALSTACK_AUTH_TOKEN in a local .env file (copy .env.example) — see infrastructure/README.md}
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      # python3, not curl: the localstack image no longer ships curl
+      test:
+        [
+          "CMD",
+          "python3",
+          "-c",
+          "import urllib.request, sys; sys.exit(0 if urllib.request.urlopen('http://localhost:4566/_localstack/health').status == 200 else 1)",
+        ]
       interval: 5s
       timeout: 5s
       retries: 20

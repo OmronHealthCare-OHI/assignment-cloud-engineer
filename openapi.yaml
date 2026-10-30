@@ -145,8 +145,83 @@ components:
 
     Measurement:
       description: |
-        ── YOUR RETRIEVAL SHAPE GOES HERE ──
-        Replace this placeholder with what a measurement looks like when read back.
-        It follows from the data model you design; it must be able to represent both
-        measurement types above.
+        A measurement as read back: it mirrors the submission, normalized to UTC —
+        `takenAt` is the device timestamp converted to UTC in a fixed format (so
+        lexicographic order is chronological), `takenAtDevice` preserves the original
+        device-local offset verbatim, and the device block is echoed back alongside
+        the values.
+      oneOf:
+        - $ref: "#/components/schemas/BloodPressureMeasurementRead"
+        - $ref: "#/components/schemas/BodyMassMeasurementRead"
+      discriminator:
+        propertyName: type
+
+    BloodPressureMeasurementRead:
       type: object
+      required: [type, takenAt, takenAtDevice, device, values]
+      properties:
+        type:
+          type: string
+          enum: [blood_pressure]
+        takenAt:
+          type: string
+          format: date-time
+          description: When the device took the reading, normalized to UTC
+        takenAtDevice:
+          type: string
+          format: date-time
+          description: The original submitted timestamp, device-local offset preserved
+        device:
+          type: object
+          required: [model, serialNumber]
+          properties:
+            model:
+              type: string
+            serialNumber:
+              type: string
+        values:
+          type: object
+          required: [systolic_mmhg, diastolic_mmhg, pulse_bpm]
+          properties:
+            systolic_mmhg:
+              type: number
+            diastolic_mmhg:
+              type: number
+            pulse_bpm:
+              type: number
+            irregular_heartbeat:
+              type: boolean
+
+    BodyMassMeasurementRead:
+      type: object
+      required: [type, takenAt, takenAtDevice, device, values]
+      properties:
+        type:
+          type: string
+          enum: [body_mass]
+        takenAt:
+          type: string
+          format: date-time
+          description: When the device took the reading, normalized to UTC
+        takenAtDevice:
+          type: string
+          format: date-time
+          description: The original submitted timestamp, device-local offset preserved
+        device:
+          type: object
+          required: [model, serialNumber]
+          properties:
+            model:
+              type: string
+            serialNumber:
+              type: string
+        values:
+          type: object
+          required: [body_mass_g]
+          properties:
+            body_mass_g:
+              type: integer
+              description: Body mass in grams
+            impedance_ohm:
+              type: integer
+              description: Bio-impedance in ohms; 0 means the impedance measurement failed
